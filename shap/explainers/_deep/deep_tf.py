@@ -150,8 +150,12 @@ class TFDeep(Explainer):
                 self.expected_value = self.run(self.model_output, self.model_inputs, self.data).mean(0)
             else:
                 if type(self.model)is tuple:
-                    sel.fModel(cnn.inputs, cnn.get_layer(theNameYouWant).outputs)
-                self.expected_value = tf.reduce_mean(self.model(self.data), 0)
+                    self.fModel(cnn.inputs, cnn.get_layer(theNameYouWant).outputs)
+                self.expected_value = tf.reduce_mean(self.model(self.data[0]), 0)
+                # PJT
+                # data_tensor = tf.convert_to_tensor(self.data[0])
+                # self.expected_value = tf.reduce_mean(self.model(data_tensor), 0)
+                # self.expected_value = tf.reduce_mean(self.model.predict(self.data[0]), 0).numpy()
 
         if not tf.executing_eagerly():
             self._init_between_tensors(self.model_output.op, self.model_inputs)
@@ -266,6 +270,9 @@ class TFDeep(Explainer):
                 model_output_values = self.run(self.model_output, self.model_inputs, X)
             else:
                 model_output_values = self.model(X)
+                # PJT
+                # X_tensor = tf.convert_to_tensor(X[0])
+                # model_output_values = self.model.predict(X[0]).numpy()
 
             if output_rank_order == "max":
                 model_output_ranks = np.argsort(-model_output_values)
@@ -315,6 +322,10 @@ class TFDeep(Explainer):
                 model_output = self.run(self.model_output, self.model_inputs, X)
             else:
                 model_output = self.model(X)
+                # PJT
+                # X_tensor = tf.convert_to_tensor(X[0])
+                # model_output = self.model(X_tensor)
+                # model_output = self.model.predict(X[0]) # .numpy()
             for l in range(len(self.expected_value)):
                 if not self.multi_input:
                     diffs = model_output[:, l] - self.expected_value[l] - output_phis[l].sum(axis=tuple(range(1, output_phis[l].ndim)))

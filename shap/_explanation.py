@@ -4,14 +4,15 @@ import numpy as np
 import sys
 import warnings
 import copy
-from slicer.interpretapi.explanation import AttributionExplanation
+# from slicer.interpretapi.explanation import AttributionExplanation
 from slicer import Slicer
 
 # slicer confuses pylint...
 # pylint: disable=no-member
 
 
-class Explanation(AttributionExplanation):
+# class Explanation(AttributionExplanation):
+class Explanation(object):
     """ This is currently an experimental feature don't depend on this object yet! :)
     """
     def __init__(
